@@ -26,3 +26,7 @@ class Com():
             text = self.serial.readLine().data().decode()
             text = text.rstrip('\r\n')
             return text
+
+    @classmethod
+    def send(self, data):
+        self.serial.write(data)

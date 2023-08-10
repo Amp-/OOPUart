@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtSerialPort
 from Communication import Com
+com = Com
 class Widget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(Widget, self).__init__(parent)
@@ -21,28 +22,15 @@ class Widget(QtWidgets.QWidget):
         lay.addLayout(hlay)
         lay.addWidget(self.output_te)
         lay.addWidget(self.button)
-        #
-        # com = Com('COM4',
-        #     baudRate=QtSerialPort.QSerialPort.Baud115200,
-        #     readyRead=self.receive)
-        com = Com
         self.serial = com.serial
-        self.serial.readyRead.connect(lambda : self.test_read())
+        self.serial.readyRead.connect(lambda: self.receive())
 
     def receive(self):
         while self.serial.canReadLine():
-            text = self.serial.readLine().data().decode()
-            text = text.rstrip('\r\n')
-            self.output_te.append(text)
-
-    def test_read(self):
-        while self.serial.canReadLine():
-            com = Com
             text = com.read()
             self.output_te.append(text)
-    def send(self):
-        self.serial.write(self.message_le.text().encode())
-
+    def send(self,data):
+        com.send(self.message_le.text().encode())
     def on_toggled(self, checked):
         self.button.setText("Disconnect" if checked else "Connect")
         if checked:
@@ -51,6 +39,7 @@ class Widget(QtWidgets.QWidget):
                     self.button.setChecked(False)
         else:
             self.serial.close()
+
 
 if __name__ == '__main__':
     import sys
