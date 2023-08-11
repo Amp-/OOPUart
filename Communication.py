@@ -1,32 +1,35 @@
 from PyQt5 import QtCore, QtWidgets, QtSerialPort
 
-"""""
-class Com(QtSerialPort.QSerialPort):
-    def print(self):
-        print(1)
-
-"""""
-
-
+portName = "/dev/ttyACM1"
+baudRate = 9600
 class Com():
     serial = QtSerialPort.QSerialPort()
-    serial.setPortName("/dev/ttyACM0")
-    serial.setBaudRate(9600)
+    serial.setPortName(portName)
+    serial.setBaudRate(baudRate)
 
-    def open1(self):
+    def open1(cls):
         try:
-            self.serial.open()
-            print(self.serial.isOpen())
+            cls.serial.open()
+            print(cls.serial.isOpen())
         except:
-            print(f"Cant opnet {self.serial.portName()}")
+            print(f"Cant opnet {cls.serial.portName()}")
 
     @classmethod
-    def read(self):
-        while self.serial.canReadLine():
-            text = self.serial.readLine().data().decode()
+    def read(cls):
+        while cls.serial.canReadLine():
+            text = cls.serial.readLine().data().decode()
             text = text.rstrip('\r\n')
             return text
 
     @classmethod
-    def send(self, data):
-        self.serial.write(data)
+    def send(cls, data):
+        cls.serial.write(data)
+    @classmethod
+    def togle(self):
+        if not self.serial.isOpen():
+            if not self.serial.open(QtCore.QIODevice.ReadWrite):
+                return False
+
+    @classmethod
+    def close(cls):
+        cls.serial.close()

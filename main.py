@@ -26,7 +26,6 @@ class Widget(QtWidgets.QWidget):
         self.serial.readyRead.connect(lambda: self.receive())
 
     def receive(self):
-        while self.serial.canReadLine():
             text = com.read()
             self.output_te.append(text)
     def send(self,data):
@@ -34,11 +33,12 @@ class Widget(QtWidgets.QWidget):
     def on_toggled(self, checked):
         self.button.setText("Disconnect" if checked else "Connect")
         if checked:
-            if not self.serial.isOpen():
-                if not self.serial.open(QtCore.QIODevice.ReadWrite):
-                    self.button.setChecked(False)
+            t = com.togle()
+            if t == False:
+                self.button.setChecked(False)
         else:
-            self.serial.close()
+            # self.serial.close()
+            com.close()
 
 
 if __name__ == '__main__':
