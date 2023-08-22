@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtWidgets, QtSerialPort
 from Communication import Com
-com = Com
+baudRate=9600
+portName = "/dev/ttyACM0"
+com = Com(baudRate=baudRate, portName=portName, serialPort=QtSerialPort.QSerialPort())
 class Widget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(Widget, self).__init__(parent)
@@ -37,7 +39,6 @@ class Widget(QtWidgets.QWidget):
             if t == False:
                 self.button.setChecked(False)
         else:
-            # self.serial.close()
             com.close()
 
 
